@@ -1,11 +1,18 @@
 import os
+import uuid
+
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
+'''
 client = MongoClient(
     os.environ['DB_PORT_27017_TCP_ADDR'],
     27017)
-db = client.fmt_workday
+'''
+
+client = MongoClient('mongodb://admin:annie510@ds031661.mlab.com:31661/fmt')
+
+db = client.fmt
 
 cast = db.cast
 
@@ -42,9 +49,34 @@ def punch_in(cast_id, worker, ts):
         {'_id' : ObjectId(cast_id)},
         {
             '$push' : {
-                'logs' : { "time_in" : ts, "worker" : worker}
+                'logs' : { "time_in" : ts, "worker" : worker, "id" : str(uuid.uuid1())}
             }
         }
     )
 
     print(result)
+
+def get_actives():
+
+    results = []
+
+    cursor = db.cast.aggregate([
+        {"$unwind": "$logs"},
+        {"$match":{"logs.time_out": {"$exists": False}}},
+        {
+            "$project": {
+                "_id":0,
+                "first_name": 1,
+                "last_name":1,
+                "session":1,
+                "time_in": "$logs.time_in",
+                "worker": "$logs.worker",
+                "log_id": "$logs.id"
+            }}
+    ])
+
+    for doc in cursor:
+
+        results.append(doc)
+
+    return results

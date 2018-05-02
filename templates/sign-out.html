@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h1>Sign Out</h1>
+  <form action="/sign-out" method="POST">
+    <div class="form-group">
+      <label for="worker">Worker</label>
+      <select class="form-control" name="worker" required=true>
+        {% for active in actives %}
+          <option value={{active['log_id']}}>{{ active['worker'] + " - signed in for " + active['first_name'] + " " + active['last_name']}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

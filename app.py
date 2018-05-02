@@ -50,6 +50,12 @@ def post_sign_in():
 
     return render_template('index.html', cast=cast)
 
+@app.route('/sign-out', methods=['GET'])
+def get_sign_out():
+
+    actives = db.get_actives()
+
+    return render_template('sign-out.html', actives=actives)
 
 
 '''
