@@ -1,17 +1,29 @@
-import os
 from flask import Flask, redirect, url_for, request, render_template
-from pymongo import MongoClient
+
+import db
 
 app = Flask(__name__)
 
-client = MongoClient(
-    os.environ['DB_PORT_27017_TCP_ADDR'],
-    27017)
-db = client.fmt_workday
-
-
 @app.route('/')
 def index():
+
+    cast = db.get_cast()
+
+    return render_template('index.html', cast=cast)
+
+@app.route('/add-cast', methods=['GET'])
+def add_cast():
+
+    return render_template('add-cast.html')
+
+@app.route('/add-cast', methods=['POST'])
+def post_cast():
+
+    first_name = (request.form.get('first-name'))
+    last_name = (request.form.get('last-name'))
+    session = (request.form.get('session'))
+
+    result = db.create_cast(first_name, last_name, session)
 
     return render_template('index.html')
 
