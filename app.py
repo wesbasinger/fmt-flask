@@ -1,3 +1,4 @@
+from time import time
 from flask import Flask, redirect, url_for, request, render_template
 
 import db
@@ -7,7 +8,9 @@ app = Flask(__name__)
 @app.route('/')
 def index():
 
-    return render_template('index.html')
+    cast = db.get_cast()
+
+    return render_template('index.html', cast=cast)
 
 @app.route('/add-cast', methods=['GET'])
 def add_cast():
@@ -31,6 +34,21 @@ def get_sign_in():
     cast = db.get_cast()
 
     return render_template('sign-in.html', cast=cast)
+
+
+@app.route('/sign-in', methods=['POST'])
+def post_sign_in():
+
+    worker = request.form.get('worker')
+    cast_id = request.form.get('cast-member')
+
+    ts = time()
+
+    db.punch_in(cast_id, worker, ts)
+
+    cast = db.get_cast()
+
+    return render_template('index.html', cast=cast)
 
 
 
