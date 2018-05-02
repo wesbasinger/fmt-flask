@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h1>Sign In</h1>
+  <form action="/sign-in" method="POST">
+    <div class="form-group">
+      <label for="worker">Worker</label>
+      <input type="text" class="form-control" name="worker" placeholder="Enter name of volunteer" required=true>
+    </div>
+    <div class="form-group">
+      <label for="cast-member">Cast Member</label>
+      <select class="form-control" name="cast-member" required=true>
+        {% for cast_member in cast %}
+          <option value={{cast_member['_id']}}>{{ cast_member['first_name'] + " " + cast_member['last_name'] + " " + cast_member['session']}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

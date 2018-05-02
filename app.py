@@ -7,9 +7,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
 
-    cast = db.get_cast()
-
-    return render_template('index.html', cast=cast)
+    return render_template('index.html')
 
 @app.route('/add-cast', methods=['GET'])
 def add_cast():
@@ -26,6 +24,14 @@ def post_cast():
     result = db.create_cast(first_name, last_name, session)
 
     return render_template('index.html')
+
+@app.route('/sign-in', methods=['GET'])
+def get_sign_in():
+
+    cast = db.get_cast()
+
+    return render_template('sign-in.html', cast=cast)
+
 
 
 '''
