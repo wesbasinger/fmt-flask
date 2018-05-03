@@ -43,6 +43,10 @@ def get_cast():
 
     return results
 
+def get_single_cast(cast_id):
+
+    return cast.find_one({'_id' : ObjectId(cast_id)})
+
 def punch_in(cast_id, worker, ts):
 
     result = db.cast.update_one(

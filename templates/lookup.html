@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h1>Lookup</h1>
+  <form action="/lookup" method="POST">
+    <div class="form-group">
+      <label for="cast-member">Cast Member</label>
+      <select class="form-control" name="cast-member" required=true>
+        {% for cast_member in cast %}
+          <option value={{cast_member['_id']}}>{{ cast_member['first_name'] + " " + cast_member['last_name'] + " " + cast_member['session']}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+{% endblock %}

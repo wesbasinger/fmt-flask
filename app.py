@@ -1,4 +1,5 @@
 from time import time
+from datetime import datetime
 from flask import Flask, redirect, url_for, request, render_template
 
 import db
@@ -56,6 +57,46 @@ def get_sign_out():
     actives = db.get_actives()
 
     return render_template('sign-out.html', actives=actives)
+
+@app.route('/lookup', methods=['GET'])
+def get_lookup():
+
+    cast = db.get_cast()
+
+    return render_template('lookup.html', cast=cast)
+
+@app.route('/lookup', methods=['POST'])
+def post_lookup():
+
+    cast_id = request.form.get('cast-member')
+
+    cast = db.get_single_cast(cast_id)
+
+    transformed = {
+        "first_name" : cast['first_name'],
+        "last_name" : cast['last_name'],
+        "session" : cast['session'],
+        "logs" : [],
+        "total_hours" : 0
+    }
+
+    for log in cast['logs']:
+
+        if log['time_out']:
+
+            formatted = {
+                "worker" : log['worker'],
+                "time_in" : datetime.fromtimestamp(log['time_in']).strftime('%Y-%m-%d %H:%M:%S'),
+                "time_out" : datetime.fromtimestamp(log['time_out']).strftime('%Y-%m-%d %H:%M:%S'),
+                "logged_time" : round(((log['time_out'] - log['time_in']) / (60*60)), 1)
+            }
+
+            transformed['total_hours'] += formatted['logged_time']
+
+            transformed['logs'].append(formatted)
+
+
+    return render_template('cast-detail.html', cast=transformed)
 
 @app.route('/sign-out', methods=['POST'])
 def post_sign_out():
