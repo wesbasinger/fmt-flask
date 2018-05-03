@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
-  <h1>Index</h1>
-  <p class="important">
-    Welcome on my awesome homepage.
-    {{ cast }}
+  <p>Welcome to the FMT Workday App</p>
+  <p>Use the links above or below to navigate the site.</p>
+    <div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-secondary"><a href="/sign-in">Sign In</a></button>
+    <button type="button" class="btn btn-secondary"><a href="/sign-out">Sign Out</a></button>
+  </div>
 {% endblock %}

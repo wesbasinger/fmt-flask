@@ -27,7 +27,7 @@ def create_cast(first_name, last_name, session):
 
     result = cast.insert_one(new_cast)
 
-    print(result)
+    return result
 
 def get_cast():
 
@@ -58,7 +58,7 @@ def punch_in(cast_id, worker, ts):
         }
     )
 
-    print(result)
+    return result
 
 def punch_out(log_id, ts):
 
@@ -70,6 +70,8 @@ def punch_out(log_id, ts):
             }
         }
     )
+
+    return result
 
 def get_actives():
 

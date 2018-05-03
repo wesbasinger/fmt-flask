@@ -27,7 +27,15 @@ def post_cast():
 
     result = db.create_cast(first_name, last_name, session)
 
-    return render_template('index.html')
+    if result:
+
+        message = "Add cast was successful.  You may now log hours."
+
+    else:
+
+        message = "Something went wrong.  Please contact site adminstrator."
+
+    return render_template('confirm.html', message=message)
 
 @app.route('/sign-in', methods=['GET'])
 def get_sign_in():
@@ -45,11 +53,17 @@ def post_sign_in():
 
     ts = time()
 
-    db.punch_in(cast_id, worker, ts)
+    result = db.punch_in(cast_id, worker, ts)
 
-    cast = db.get_cast()
+    if result:
 
-    return render_template('index.html', cast=cast)
+        message = "Sign in was successful.  Happy workday!"
+
+    else:
+
+        message = "Something went wrong.  Please contact site adminstrator."
+
+    return render_template('confirm.html', message=message)
 
 @app.route('/sign-out', methods=['GET'])
 def get_sign_out():
@@ -105,25 +119,17 @@ def post_sign_out():
 
     ts = time()
 
-    db.punch_out(log_id, ts)
+    result = db.punch_out(log_id, ts)
 
-    cast = db.get_cast()
+    if result:
 
-    return render_template('index.html', cast=cast)
+        message = "Sign out was successful.  You should be able to view logged hours."
 
+    else:
 
-'''
-@app.route('/new', methods=['POST'])
-def new():
+        message = "Something went wrong.  Please contact site adminstrator."
 
-    item_doc = {
-        'name': request.form['name'],
-        'description': request.form['description']
-    }
-    db.tododb.insert_one(item_doc)
-
-    return redirect(url_for('todo'))
-'''
+    return render_template('confirm.html', message=message)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
