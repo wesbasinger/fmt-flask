@@ -56,6 +56,17 @@ def punch_in(cast_id, worker, ts):
 
     print(result)
 
+def punch_out(log_id, ts):
+
+    result = db.cast.update_one(
+        {'logs.id': log_id},
+        {
+            "$set" : {
+                "logs.$.time_out": ts
+            }
+        }
+    )
+
 def get_actives():
 
     results = []

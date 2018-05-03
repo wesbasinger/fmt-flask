@@ -57,6 +57,19 @@ def get_sign_out():
 
     return render_template('sign-out.html', actives=actives)
 
+@app.route('/sign-out', methods=['POST'])
+def post_sign_out():
+
+    log_id = request.form.get('log-id')
+
+    ts = time()
+
+    db.punch_out(log_id, ts)
+
+    cast = db.get_cast()
+
+    return render_template('index.html', cast=cast)
+
 
 '''
 @app.route('/new', methods=['POST'])
