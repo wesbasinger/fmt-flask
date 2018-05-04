@@ -4,13 +4,11 @@ import uuid
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-'''
 client = MongoClient(
     os.environ['DB_PORT_27017_TCP_ADDR'],
     27017)
-'''
 
-client = MongoClient('mongodb://admin:annie510@ds031661.mlab.com:31661/fmt')
+#client = MongoClient('mongodb://admin:*******@ds031661.mlab.com:31661/fmt')
 
 db = client.fmt
 
