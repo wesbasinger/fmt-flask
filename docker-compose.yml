@@ -1,6 +1,6 @@
 web:
   build: .
-  command: python -u app.py
+  command: gunicorn app:app -b 0.0.0.0:80
   ports:
     - "80:80"
   volumes:
