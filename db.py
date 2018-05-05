@@ -8,7 +8,7 @@ client = MongoClient(
     os.environ['DB_PORT_27017_TCP_ADDR'],
     27017)
 
-#client = MongoClient('mongodb://admin:*******@ds031661.mlab.com:31661/fmt')
+# client = MongoClient('mongodb://admin:******@ds031661.mlab.com:31661/fmt')
 
 db = client.fmt
 
@@ -45,13 +45,18 @@ def get_single_cast(cast_id):
 
     return cast.find_one({'_id' : ObjectId(cast_id)})
 
-def punch_in(cast_id, worker, ts):
+def punch_in(cast_id, worker, ts, comment):
 
     result = db.cast.update_one(
         {'_id' : ObjectId(cast_id)},
         {
             '$push' : {
-                'logs' : { "time_in" : ts, "worker" : worker, "id" : str(uuid.uuid1())}
+                'logs' : {
+                    "time_in" : ts,
+                    "worker" : worker,
+                    "id" : str(uuid.uuid1()),
+                    "comment" : comment
+                }
             }
         }
     )

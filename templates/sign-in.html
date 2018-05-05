@@ -13,6 +13,10 @@
           <option value={{cast_member['_id']}}>{{ cast_member['first_name'] + " " + cast_member['last_name'] + " " + cast_member['session']}}</option>
         {% endfor %}
       </select>
+      <div class="form-group">
+        <label for="comment">Comment</label>
+        <input type="text" class="form-control" name="comment" placeholder="Enter comment if desired.">
+      </div>
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>

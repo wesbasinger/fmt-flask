@@ -50,10 +50,11 @@ def post_sign_in():
 
     worker = request.form.get('worker')
     cast_id = request.form.get('cast-member')
+    comment = request.form.get('comment')
 
     ts = time()
 
-    result = db.punch_in(cast_id, worker, ts)
+    result = db.punch_in(cast_id, worker, ts, comment)
 
     if result:
 
@@ -96,13 +97,14 @@ def post_lookup():
 
     for log in cast['logs']:
 
-        if log['time_out']:
+        if 'time_out' in log:
 
             formatted = {
                 "worker" : log['worker'],
                 "time_in" : datetime.fromtimestamp(log['time_in']).strftime('%Y-%m-%d %H:%M:%S'),
                 "time_out" : datetime.fromtimestamp(log['time_out']).strftime('%Y-%m-%d %H:%M:%S'),
-                "logged_time" : round(((log['time_out'] - log['time_in']) / (60*60)), 1)
+                "logged_time" : round(((log['time_out'] - log['time_in']) / (60*60)), 1),
+                "comment" : log['comment']
             }
 
             transformed['total_hours'] += formatted['logged_time']

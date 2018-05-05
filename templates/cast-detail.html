@@ -9,6 +9,7 @@
         <th scope="col">Worker</th>
         <th scope="col">Time In</th>
         <th scope="col">Time Out</th>
+        <th scope="col">Comment</th>
         <th scope="col">Logged Time</th>
       </tr>
     </thead>
@@ -18,6 +19,7 @@
           <td>{{ log['worker'] }}</td>
           <td>{{ log['time_in'] }}</td>
           <td>{{ log['time_out'] }}</td>
+          <td>{{ log['comment'] }}</td>
           <td>{{ log['logged_time'] }}</td>
         </tr>
       {% endfor %}
