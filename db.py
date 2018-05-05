@@ -100,3 +100,30 @@ def get_actives():
         results.append(doc)
 
     return results
+
+def get_all_data():
+
+    results = []
+
+    cursor = db.cast.aggregate([
+        {"$unwind": "$logs"},
+        { "$match":{"logs.time_out": {"$exists": True}}},
+        { "$project": {
+            "_id":0,
+            "cast" : {
+            "$concat": [ "$first_name", " ", "$last_name" ]
+            },
+            "session": 1,
+            "time_in": "$logs.time_in",
+            "time_out": "$logs.time_out",
+            "worker": "$logs.worker",
+            "comment": "$logs.comment",
+            "total_time": {"$subtract": ["$logs.time_out",  "$logs.time_in"]}}
+        }
+    ])
+
+    for doc in cursor:
+
+        results.append(doc)
+
+    return results

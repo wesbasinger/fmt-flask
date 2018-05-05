@@ -1,6 +1,7 @@
 from time import time
 from datetime import datetime
-from flask import Flask, redirect, url_for, request, render_template
+from flask import Flask, redirect, url_for, request, render_template, make_response
+import csv
 
 import db
 
@@ -133,7 +134,38 @@ def post_sign_out():
 
     return render_template('confirm.html', message=message)
 
-'''
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port=80)
-'''
+@app.route('/download')
+def download_csv():
+
+    # list of dictionaries
+    data = db.get_all_data()
+
+    if data == []:
+
+        message = "No data to download."
+
+        return render_template('confirm.html', message=message)
+
+    csv = "Cast, Session, Worker, Time In, Time Out, Comment, Total Time\n"
+
+    for record in data:
+
+        csv += record['cast'] + ", "
+        csv += record['session'] + ", "
+        csv += record['worker'] + ", "
+        csv += datetime.fromtimestamp(record['time_in']).strftime('%Y-%m-%d %H:%M:%S') + ", "
+        csv += datetime.fromtimestamp(record['time_out']).strftime('%Y-%m-%d %H:%M:%S') + ", "
+        csv += record['comment'] + ", "
+        csv += str(round(record['total_time']/60, 2))
+        csv += "\n"
+
+    response = make_response(csv)
+    cd = 'attachment; filename=data.csv'
+    response.headers['Content-Disposition'] = cd
+    response.mimetype='text/csv'
+
+    return response
+
+
+# if __name__ == "__main__":
+#     app.run(host='0.0.0.0', debug=True)
